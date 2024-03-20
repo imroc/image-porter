@@ -4,8 +4,8 @@ import "regexp"
 
 type (
 	Config struct {
-		Images  []Image `yaml:"images"`
 		Default Default `yaml:"default,omitempty"`
+		Images  []Image `yaml:"images"`
 	}
 	Default struct {
 		TagFilter *TagFilter `yaml:"tagFilter,omitempty"`
