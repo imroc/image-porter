@@ -1,11 +1,14 @@
 package main
 
-import "regexp"
+import (
+	"fmt"
+	"regexp"
+)
 
 type (
 	Config struct {
-		Default Default `yaml:"default,omitempty"`
-		Images  []Image `yaml:"images"`
+		Default *Default `yaml:"default,omitempty"`
+		Images  []*Image `yaml:"images"`
 	}
 	Default struct {
 		TagFilter *TagFilter `yaml:"tagFilter,omitempty"`
@@ -21,24 +24,11 @@ type (
 	}
 )
 
-var globalDefaultTagFilter = &TagFilter{
-	Regex: `v?\d+(\.\d+){0,2}`,
-}
-
-func init() {
-	err := globalDefaultTagFilter.Init()
-	if err != nil {
-		panic(err)
-	}
-}
-
 func (c *Config) Init() (err error) {
 	var defaultTagFilter *TagFilter
-	if c.Default.TagFilter != nil {
+	if c.Default != nil && c.Default.TagFilter != nil {
 		c.Default.TagFilter.Init()
 		defaultTagFilter = c.Default.TagFilter
-	} else {
-		defaultTagFilter = globalDefaultTagFilter
 	}
 	for _, i := range c.Images {
 		if tf := i.TagFilter; tf != nil {
@@ -53,7 +43,17 @@ func (c *Config) Init() (err error) {
 	return
 }
 
+func (tf *TagFilter) String() string {
+	if tf.Regex != "" {
+		return fmt.Sprintf(`regex: %s`, tf.Regex)
+	}
+	return ""
+}
+
 func (tf *TagFilter) FilterTags(tags []string) []string {
+	if tf == nil {
+		return tags
+	}
 	var result []string
 	for _, tag := range tags {
 		if tf.Match(tag) {

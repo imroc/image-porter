@@ -1,24 +1,3 @@
-# image-porter
-
-An image sync tool based on declarative configuration file, which can specify the source and destination of the images, and filter the tag list that needs to be synchronized.
-
-## Installation
-
-```bash
-go install github.com/imroc/image-porter@latest
-```
-
-## Usage
-
-Use `image-porter` to sync images between different registries:
-
-```bash
-image-porter config.yaml
-```
-
-A config file is required, for example:
-
-```yaml
 default:
   tagFilter:
     regex: ^v?\d+(\.\d+){0,2}$
@@ -37,4 +16,3 @@ images:
       regex: ^.*$
   - from: registry.k8s.io/ingress-nginx/controller
     to: docker.io/k8smirror/ingress-nginx-controller
-```
