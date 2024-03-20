@@ -16,7 +16,7 @@ Use `image-porter` to sync images between different registries:
 image-porter config.yaml
 ```
 
-a config file is required:
+a config file is required, for example:
 
 ```yaml
 default:
