@@ -30,7 +30,11 @@ func getCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return nil
+			err = config.Init()
+			if err != nil {
+				return err
+			}
+			return Sync(&config)
 		},
 	}
 
