@@ -19,8 +19,9 @@ FROM alpine:3.19
 
 VOLUME /etc/image-porter
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates skopeo
 
 COPY --from=build /workspace/image-porter /usr/local/bin/image-porter
+COPY --from=build /go/bin/image-porter /usr/local/bin/image-porter
 
 CMD ["image-porter", "/etc/image-porter/config.yaml"]
