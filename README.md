@@ -38,3 +38,7 @@ images:
   - from: registry.k8s.io/ingress-nginx/controller
     to: docker.io/k8smirror/ingress-nginx-controller
 ```
+
+## Example: Sync Images with Kubernetes CronJob
+
+Checkout [this directory](./examples/kubernetes-cronjob) for how to sync images with Kubernetes CronJob (Use kustomize to manage manifests).

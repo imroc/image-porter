@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: image-porter
+spec:
+  schedule: "0 0 * * *" # sync images at 00:00 every day
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: porter
+              image: docker.io/imroc/image-porter:latest
+              imagePullPolicy: Always
+              command:
+                - image-porter
+                - /etc/image-porter/config.yaml
+              securityContext:
+                runAsUser: 0
+              volumeMounts:
+                - name: config
+                  mountPath: /etc/image-porter
+                - name: docker-config
+                  mountPath: /root/.docker
+          restartPolicy: Never
+          volumes:
+            - name: config
+              configMap:
+                name: image-porter-config
+            - name: docker-config
+              secret:
+                secretName: image-porter-docker-config
