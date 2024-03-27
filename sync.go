@@ -30,8 +30,7 @@ func Sync(config *Config) error {
 		klog.V(2).Infof("filterd tag list for image %s (%s): %v", image.From, image.TagFilter.String(), srcTags)
 		dstTags, err := listTags(image.To)
 		if err != nil {
-			klog.Errorf("failed to list dst tags for image %s: %v", image.From, err)
-			continue
+			klog.Infof("dst image have no tags: %s (%v)", image.To, err)
 		}
 		tags := tagsToSync(srcTags, dstTags)
 		if len(tags) == 0 {

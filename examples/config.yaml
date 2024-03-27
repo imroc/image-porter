@@ -16,3 +16,5 @@ images:
       regex: ^.*$
   - from: registry.k8s.io/ingress-nginx/controller
     to: docker.io/k8smirror/ingress-nginx-controller
+  - from: registry.k8s.io/kube-state-metrics/kube-state-metrics
+    to: docker.io/k8smirror/kube-state-metrics

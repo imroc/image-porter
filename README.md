@@ -1,6 +1,8 @@
 # image-porter
 
-An image sync tool based on declarative configuration file, which can specify the source and destination of the images, and filter the tag list that needs to be synchronized.
+An image sync tool based on declarative configuration file, which can specify the source and destination of the images, and filter the tag list that needs to be synchronized, only sync newly pushed image tags if image have synced before.
+
+You can use crontab / cronjob to sync images periodicly, so that keep image tags update to date.
 
 ## Installation
 
