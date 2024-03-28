@@ -11,6 +11,7 @@ import (
 )
 
 func getCmd() *cobra.Command {
+	var retryAttempt int
 	cmd := &cobra.Command{
 		Use:               "image-porter <CONFIG_FILE>",
 		Short:             "an image syncing tool",
@@ -34,12 +35,14 @@ func getCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return Sync(&config)
+			return Sync(&config, retryAttempt)
 		},
 	}
 
 	flags := cmd.PersistentFlags()
 	initKlogFlags(flags)
+	flags.IntVar(&retryAttempt, "retry-attempt", 0, "retry count when image sync failed")
+	flags.Parse(os.Args[1:])
 	return cmd
 }
 

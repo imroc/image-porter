@@ -14,7 +14,7 @@ type Tags struct {
 	Tags []string `json:"Tags"`
 }
 
-func Sync(config *Config) error {
+func Sync(config *Config, retryAttempt int) error {
 	for _, image := range config.Images {
 		srcTags, err := listTags(image.From)
 		if err != nil {
@@ -38,11 +38,7 @@ func Sync(config *Config) error {
 			continue
 		}
 		klog.Infof("sync tags for image %s: %v", image.From, tags)
-		err = syncImageTags(image.From, image.To, tags)
-		if len(tags) == 0 {
-			klog.Errorf("failed to sync image %s: %v", image.From, err)
-			continue
-		}
+		syncImageTags(image.From, image.To, tags, retryAttempt)
 	}
 	return nil
 }
@@ -82,17 +78,19 @@ func sliceToMap[T comparable](slice []T) map[T]bool {
 	return m
 }
 
-func syncImageTags(imageFrom, imageTo string, tags []string) error {
+func syncImageTags(imageFrom, imageTo string, tags []string, retryAttempt int) {
 	for _, tag := range tags {
 		args := []string{"copy", "--all", fmt.Sprintf("docker://%s:%s", imageFrom, tag), fmt.Sprintf("docker://%s:%s", imageTo, tag)}
 		klog.Infof("execute command: skopeo %s", strings.Join(args, " "))
 		cmd := exec.Command("skopeo", args...)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
-		err := cmd.Run()
-		if err != nil {
-			return err
+		var err error
+		for i := 0; i < retryAttempt; i++ {
+			err = cmd.Run()
+			if err == nil {
+				continue
+			}
 		}
 	}
-	return nil
 }
