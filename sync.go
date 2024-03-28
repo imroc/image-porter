@@ -67,7 +67,7 @@ func tagsToSync(srcTags, dstTags []string) []string {
 	}
 	dstMap := sliceToMap(dstTags)
 	for _, tag := range srcTags {
-		if !dstMap[tag] {
+		if tag == "latest" || !dstMap[tag] {
 			result = append(result, tag)
 		}
 	}
