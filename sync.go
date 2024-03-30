@@ -41,7 +41,7 @@ func Sync(config *Config, retryAttempt int) error {
 			klog.Infof("no new tags for image %s", image.From)
 		}
 		if len(toUpdate) > 0 {
-			updateImageTags(image.From, image.To, toSync, retryAttempt)
+			updateImageTags(image.From, image.To, toUpdate, retryAttempt)
 		}
 	}
 	return nil
@@ -131,7 +131,7 @@ func syncImageTag(imageFrom, imageTo, tag string, retryAttempt int) {
 }
 
 func syncImageTags(imageFrom, imageTo string, tags []string, retryAttempt int) {
-	for _, tag := range tags {
-		syncImageTag(imageFrom, imageTo, tag, retryAttempt)
+	for i := len(tags) - 1; i >= 0; i-- {
+		syncImageTag(imageFrom, imageTo, tags[i], retryAttempt)
 	}
 }
