@@ -71,8 +71,11 @@ func tagsToSync(srcTags, dstTags []string) (toSync, toUpdate []string) {
 			toSync = append(toSync, tag)
 			continue
 		}
-		_, err := semver.NewVersion(tag)
-		if err != nil { // not sematic version, may update
+		_, err := semver.NewVersion(tag) // ignore updates of sematic version tag
+		if err != nil {                  // not sematic version, may update
+			if strings.Contains(tag, "-") { // ignore updates of the version that contains "-"
+				continue
+			}
 			toUpdate = append(toUpdate, tag)
 		}
 	}
