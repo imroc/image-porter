@@ -125,7 +125,7 @@ func syncImageTag(imageFrom, imageTo, tag string, retryAttempt int) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	var err error
-	for i := 0; i < retryAttempt; i++ {
+	for i := -1; i < retryAttempt; i++ {
 		err = cmd.Run()
 		if err == nil {
 			continue
