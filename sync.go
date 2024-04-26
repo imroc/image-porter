@@ -28,6 +28,12 @@ func Sync(config *Config, retryAttempt int) error {
 			klog.Infof("no tags matched for image %s after filter", image.From)
 			continue
 		}
+		if image.TagLimit != nil {
+			limit := *image.TagLimit
+			if limit < len(srcTags) {
+				srcTags = srcTags[len(srcTags)-limit:]
+			}
+		}
 		klog.V(2).Infof("filterd tag list for image %s (%s): %v", image.From, image.TagFilter.String(), srcTags)
 		dstTags, err := listTags(image.To)
 		if err != nil {

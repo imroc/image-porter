@@ -12,9 +12,11 @@ type (
 	}
 	Default struct {
 		TagFilter *TagFilter `yaml:"tagFilter,omitempty"`
+		TagLimit  *int       `yaml:"tagLimit"`
 	}
 	Image struct {
 		TagFilter *TagFilter `yaml:"tagFilter,omitempty"`
+		TagLimit  *int       `yaml:"tagLimit"`
 		From      string     `yaml:"from"`
 		To        string     `yaml:"to"`
 	}
@@ -38,6 +40,9 @@ func (c *Config) Init() (err error) {
 			}
 		} else {
 			i.TagFilter = defaultTagFilter
+		}
+		if c.Default.TagLimit != nil && i.TagLimit == nil {
+			i.TagLimit = c.Default.TagLimit
 		}
 	}
 	return
