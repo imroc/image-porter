@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
 
 	"github.com/Masterminds/semver/v3"
@@ -28,6 +29,8 @@ func Sync(config *Config, retryAttempt int) error {
 			klog.Infof("no tags matched for image %s after filter", image.From)
 			continue
 		}
+		sort.Sort(ImageTags(srcTags))
+
 		if image.TagLimit != nil {
 			limit := *image.TagLimit
 			if limit < len(srcTags) {
