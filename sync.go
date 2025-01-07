@@ -31,7 +31,7 @@ func Sync(config *Config, retryAttempt int) error {
 		}
 		sort.Sort(ImageTags(srcTags))
 
-		if image.TagLimit != nil {
+		if image.TagLimit != nil && *image.TagLimit > 0 {
 			limit := *image.TagLimit
 			if limit < len(srcTags) {
 				srcTags = srcTags[len(srcTags)-limit:]
