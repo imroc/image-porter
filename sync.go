@@ -30,6 +30,7 @@ func Sync(config *Config, retryAttempt int) error {
 			continue
 		}
 		sort.Sort(ImageTags(srcTags))
+		klog.V(2).Infof("full filterd tag list for image %s (%s): %v", image.From, image.TagFilter.String(), srcTags)
 
 		if image.TagLimit != nil && *image.TagLimit > 0 {
 			limit := *image.TagLimit
@@ -37,7 +38,7 @@ func Sync(config *Config, retryAttempt int) error {
 				srcTags = srcTags[len(srcTags)-limit:]
 			}
 		}
-		klog.V(2).Infof("filterd tag list for image %s (%s): %v", image.From, image.TagFilter.String(), srcTags)
+		klog.V(2).Infof("filterd tag list with tag limit for image %s (%s): %v", image.From, image.TagFilter.String(), srcTags)
 		dstTags, err := listTags(image.To)
 		if err != nil {
 			klog.Infof("dst image have no tags: %s (%v)", image.To, err)
